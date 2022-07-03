@@ -1,9 +1,7 @@
 import { serve } from "https://deno.land/std@0.146.0/http/server.ts";
-import {
-  config,
-  DotenvConfig,
-} from "https://deno.land/std@0.146.0/dotenv/mod.ts";
+import { format } from "https://deno.land/std@0.146.0/datetime/mod.ts";
 import { Ok, Err, Result, isErr } from "./result.ts";
+import { getEnv, Env } from "./env.ts";
 
 type HandlerError = {
   status: number;
@@ -14,7 +12,7 @@ type HandlerError = {
 // deno-lint-ignore require-await
 async function handleRequest(
   request: Request,
-  env: DotenvConfig
+  env: Env
 ): Promise<Result<Response, HandlerError>> {
   const { protocol, pathname } = new URL(request.url);
 
@@ -77,7 +75,7 @@ async function handleRequest(
 const verifyCredentials = (
   user: string,
   pass: string,
-  env: DotenvConfig
+  env: Env
 ): Result<boolean, HandlerError> => {
   if (user !== env.BASIC_USER || pass !== env.BASIC_PASS) {
     return Err(unnauthorized("Invalid credentials."));
@@ -135,15 +133,29 @@ const errorResponse = (e: HandlerError): Response => {
   });
 };
 
-async function handler(request: Request): Promise<Response> {
-  const env = await config({ defaults: "./basic-auth/.env.defaults" });
-  const result = await handleRequest(request, env);
+function render(result: Result<Response, HandlerError>) {
   switch (result.type) {
     case "Ok":
       return result.payload;
     case "Err":
       return errorResponse(result.payload);
   }
+}
+
+function log(request: Request, result: Result<Response, HandlerError>) {
+  const { pathname } = new URL(request.url);
+  console.log(
+    `${format(new Date(), "yyyy-MM-dd HH:mm:ss")} ${pathname} ${
+      result.payload.status
+    }`
+  );
+}
+
+async function handler(request: Request): Promise<Response> {
+  const env = await getEnv();
+  const result = await handleRequest(request, env);
+  log(request, result);
+  return render(result);
 }
 
 await serve(handler);
