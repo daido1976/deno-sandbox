@@ -12,10 +12,10 @@ export type Todo = {
 };
 
 export type DBCommands = {
-  getTodos(): Todo[];
-  createTodo(todo: NewTodo): Todo;
-  updateTodo(todo: Todo): Todo;
-  deleteTodo(id: number): Todo;
+  getTodos: () => Todo[];
+  createTodo: (todo: NewTodo) => Todo;
+  updateTodo: (todo: Todo) => Todo;
+  deleteTodo: (id: number) => Todo;
 };
 
 // TODO: テストでは initDb、実装では initCommands を使っている。重複しているのをどうにかする
