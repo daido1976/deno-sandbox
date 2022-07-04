@@ -5,18 +5,12 @@ import {
   describe,
   it,
 } from "https://deno.land/std@0.146.0/testing/bdd.ts";
-import {
-  createTodo,
-  deleteTodo,
-  getTodos,
-  initDb,
-  Todo,
-  updateTodo,
-} from "./db.ts";
+import { initCommands, initDb, Todo } from "./db.ts";
 
 const testDb = initDb("test.db");
+const commands = initCommands("test.db");
 
-describe("db", () => {
+describe("commands", () => {
   afterEach(() => {
     testDb.query("DELETE FROM todos;");
     testDb.query("DELETE FROM sqlite_sequence WHERE name = 'todos';");
@@ -28,7 +22,7 @@ describe("db", () => {
     });
 
     it("gets todos", () => {
-      const todos = getTodos(testDb);
+      const todos = commands.getTodos();
       const exptected: Todo[] = [
         {
           id: 1,
@@ -51,10 +45,10 @@ describe("db", () => {
         title: "title",
         body: "body",
       };
-      const createdTodo = createTodo(testDb, newTodo);
+      const createdTodo = commands.createTodo(newTodo);
       assertEquals(createdTodo, exptectedTodo);
 
-      const todos = getTodos(testDb);
+      const todos = commands.getTodos();
       const exptectedTodos: Todo[] = [
         {
           id: 1,
@@ -82,10 +76,10 @@ describe("db", () => {
         title: "updated title",
         body: "updated body",
       };
-      const updatedTodo = updateTodo(testDb, todo);
+      const updatedTodo = commands.updateTodo(todo);
       assertEquals(updatedTodo, todo);
 
-      const todos = getTodos(testDb);
+      const todos = commands.getTodos();
       const exptectedTodos: Todo[] = [
         {
           id: 1,
@@ -118,10 +112,10 @@ describe("db", () => {
         title: "title1",
         body: "body1",
       };
-      const deletedTodo = deleteTodo(testDb, 1);
+      const deletedTodo = commands.deleteTodo(1);
       assertEquals(deletedTodo, exptectedTodo);
 
-      const todos = getTodos(testDb);
+      const todos = commands.getTodos();
       const exptectedTodos: Todo[] = [
         {
           id: 2,

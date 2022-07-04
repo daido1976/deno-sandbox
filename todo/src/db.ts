@@ -18,7 +18,7 @@ export type DBCommands = {
   deleteTodo: (id: number) => Todo;
 };
 
-// TODO: テストでは initDb、実装では initCommands を使っている。重複しているのをどうにかする
+// TODO: initDb か initCommands のどちらかに一本化した方がいい気がするが、テスト用の処理が必要なため initCommands に一本化できない
 export function initDb(dbName: string): DB {
   const db = new DB(dbName);
   db.query(`
@@ -41,12 +41,12 @@ export function initCommands(dbName: string): DBCommands {
   };
 }
 
-export function getTodos(db: DB): Todo[] {
+function getTodos(db: DB): Todo[] {
   const todos = db.queryEntries<Todo>("SELECT * FROM todos;");
   return todos;
 }
 
-export function createTodo(db: DB, todo: NewTodo): Todo {
+function createTodo(db: DB, todo: NewTodo): Todo {
   const todos = db.queryEntries<Todo>(
     "INSERT INTO todos (title, body) VALUES (:title, :body) RETURNING *;",
     todo
@@ -54,7 +54,7 @@ export function createTodo(db: DB, todo: NewTodo): Todo {
   return todos[0];
 }
 
-export function updateTodo(db: DB, todo: Todo): Todo {
+function updateTodo(db: DB, todo: Todo): Todo {
   const todos = db.queryEntries<Todo>(
     "UPDATE todos SET title = :title, body = :body WHERE id = :id RETURNING *;",
     todo
@@ -62,7 +62,7 @@ export function updateTodo(db: DB, todo: Todo): Todo {
   return todos[0];
 }
 
-export function deleteTodo(db: DB, id: number): Todo {
+function deleteTodo(db: DB, id: number): Todo {
   const todos = db.queryEntries<Todo>(
     "DELETE FROM todos WHERE id = :id RETURNING *;",
     { id }
