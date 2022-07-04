@@ -32,14 +32,7 @@ export function initDb(dbName: string): DB {
 }
 
 export function initCommands(dbName: string): DBCommands {
-  const db = new DB(dbName);
-  db.query(`
-    CREATE TABLE IF NOT EXISTS todos (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      title TEXT,
-      body TEXT
-    );`);
-
+  const db = initDb(dbName);
   return {
     getTodos: () => getTodos(db),
     createTodo: (todo: NewTodo) => createTodo(db, todo),

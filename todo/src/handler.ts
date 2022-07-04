@@ -15,7 +15,7 @@ type HandlerError = {
 };
 
 async function handleIndex(
-  _request: Request,
+  _req: Request,
   db: DBCommands
 ): Promise<Result<Response, HandlerError>> {
   const todos = db.getTodos();
@@ -23,20 +23,20 @@ async function handleIndex(
 }
 
 async function handleCreate(
-  request: Request,
+  req: Request,
   db: DBCommands
 ): Promise<Result<Response, HandlerError>> {
-  const newTodo: NewTodo = await request.json();
+  const newTodo: NewTodo = await req.json();
   const todo = db.createTodo(newTodo);
   return Ok(responseJson(todo));
 }
 
 async function handleUpdate(
-  request: Request,
+  req: Request,
   db: DBCommands
 ): Promise<Result<Response, HandlerError>> {
-  const reqTodo: ReqTodo = await request.json();
-  const id = extractId(request.url);
+  const reqTodo: ReqTodo = await req.json();
+  const id = extractId(req.url);
 
   const todo = db.updateTodo({
     id: id,
@@ -46,10 +46,10 @@ async function handleUpdate(
 }
 
 async function handleDelete(
-  request: Request,
+  req: Request,
   db: DBCommands
 ): Promise<Result<Response, HandlerError>> {
-  const id = extractId(request.url);
+  const id = extractId(req.url);
   const todo = db.deleteTodo(id);
   return Ok(responseJson(todo));
 }
@@ -61,32 +61,32 @@ function extractId(url: string) {
 }
 
 async function handleRequest(
-  request: Request,
+  req: Request,
   db: DBCommands
 ): Promise<Result<Response, HandlerError>> {
-  const { pathname } = new URL(request.url);
+  const { pathname } = new URL(req.url);
   const pathPattern = new URLPattern({ pathname: "/todos*" });
-  const method = request.method;
+  const method = req.method;
 
   if (pathPattern.test({ pathname })) {
     switch (method) {
       case "GET":
-        return handleIndex(request, db);
+        return handleIndex(req, db);
       case "POST":
-        return handleCreate(request, db);
+        return handleCreate(req, db);
       case "PUT":
-        return handleUpdate(request, db);
+        return handleUpdate(req, db);
       case "DELETE":
-        return handleDelete(request, db);
+        return handleDelete(req, db);
     }
   }
 
   return Ok(new Response("Not Found.", { status: 404 }));
 }
 
-function log(request: Request, result: Result<Response, HandlerError>) {
-  const { pathname } = new URL(request.url);
-  const method = request.method;
+function log(req: Request, result: Result<Response, HandlerError>) {
+  const { pathname } = new URL(req.url);
+  const method = req.method;
 
   console.log(
     `${format(new Date(), "yyyy-MM-dd HH:mm:ss")} ${method} ${pathname} ${
@@ -127,9 +127,9 @@ function render(result: Result<Response, HandlerError>) {
   }
 }
 
-export async function handler(request: Request): Promise<Response> {
+export async function handler(req: Request): Promise<Response> {
   const dbCommands = initCommands("development.db");
-  const result = await handleRequest(request, dbCommands);
-  log(request, result);
+  const result = await handleRequest(req, dbCommands);
+  log(req, result);
   return render(result);
 }
