@@ -1,6 +1,6 @@
 // deno-lint-ignore-file require-await
 import { format } from "https://deno.land/std@0.146.0/datetime/mod.ts";
-import { DBCommands, NewTodo, initCommands } from "./db.ts";
+import { DBCommands, initCommands, initDb } from "./db.ts";
 import { Ok, Result } from "./result.ts";
 
 type ReqTodo = {
@@ -26,7 +26,7 @@ async function handleCreate(
   req: Request,
   db: DBCommands
 ): Promise<Result<Response, HandlerError>> {
-  const newTodo: NewTodo = await req.json();
+  const newTodo: ReqTodo = await req.json();
   const todo = db.createTodo(newTodo);
   return Ok(responseJson(todo));
 }
@@ -128,7 +128,7 @@ function render(result: Result<Response, HandlerError>) {
 }
 
 export async function handler(req: Request): Promise<Response> {
-  const dbCommands = initCommands("development.db");
+  const dbCommands = initCommands(initDb("development.db"));
   const result = await handleRequest(req, dbCommands);
   log(req, result);
   return render(result);

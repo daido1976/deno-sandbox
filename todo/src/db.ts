@@ -18,7 +18,6 @@ export type DBCommands = {
   deleteTodo: (id: number) => Todo;
 };
 
-// TODO: initDb か initCommands のどちらかに一本化した方がいい気がするが、テスト用の処理が必要なため initCommands に一本化できない
 export function initDb(dbName: string): DB {
   const db = new DB(dbName);
   db.query(`
@@ -31,8 +30,7 @@ export function initDb(dbName: string): DB {
   return db;
 }
 
-export function initCommands(dbName: string): DBCommands {
-  const db = initDb(dbName);
+export function initCommands(db: DB): DBCommands {
   return {
     getTodos: () => getTodos(db),
     createTodo: (todo: NewTodo) => createTodo(db, todo),

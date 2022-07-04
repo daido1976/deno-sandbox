@@ -8,7 +8,7 @@ import {
 import { initCommands, initDb, Todo } from "./db.ts";
 
 const testDb = initDb("test.db");
-const commands = initCommands("test.db");
+const commands = initCommands(testDb);
 
 describe("commands", () => {
   afterEach(() => {
