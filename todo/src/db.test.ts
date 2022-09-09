@@ -23,14 +23,14 @@ describe("commands", () => {
 
     it("gets todos", () => {
       const todos = commands.getTodos();
-      const exptected: Todo[] = [
+      const expected: Todo[] = [
         {
           id: 1,
           title: "title",
           body: "body",
         },
       ];
-      assertEquals(todos, exptected);
+      assertEquals(todos, expected);
     });
   });
 
@@ -40,23 +40,23 @@ describe("commands", () => {
         title: "title",
         body: "body",
       };
-      const exptectedTodo = {
+      const expectedTodo = {
         id: 1,
         title: "title",
         body: "body",
       };
       const createdTodo = commands.createTodo(newTodo);
-      assertEquals(createdTodo, exptectedTodo);
+      assertEquals(createdTodo, expectedTodo);
 
       const todos = commands.getTodos();
-      const exptectedTodos: Todo[] = [
+      const expectedTodos: Todo[] = [
         {
           id: 1,
           title: "title",
           body: "body",
         },
       ];
-      assertEquals(todos, exptectedTodos);
+      assertEquals(todos, expectedTodos);
     });
   });
 
@@ -80,7 +80,7 @@ describe("commands", () => {
       assertEquals(updatedTodo, todo);
 
       const todos = commands.getTodos();
-      const exptectedTodos: Todo[] = [
+      const expectedTodos: Todo[] = [
         {
           id: 1,
           title: "updated title",
@@ -92,7 +92,7 @@ describe("commands", () => {
           body: "body2",
         },
       ];
-      assertEquals(todos, exptectedTodos);
+      assertEquals(todos, expectedTodos);
     });
   });
 
@@ -107,23 +107,23 @@ describe("commands", () => {
     });
 
     it("deletes the todo", () => {
-      const exptectedTodo = {
+      const expectedTodo = {
         id: 1,
         title: "title1",
         body: "body1",
       };
       const deletedTodo = commands.deleteTodo(1);
-      assertEquals(deletedTodo, exptectedTodo);
+      assertEquals(deletedTodo, expectedTodo);
 
       const todos = commands.getTodos();
-      const exptectedTodos: Todo[] = [
+      const expectedTodos: Todo[] = [
         {
           id: 2,
           title: "title2",
           body: "body2",
         },
       ];
-      assertEquals(todos, exptectedTodos);
+      assertEquals(todos, expectedTodos);
     });
   });
 });
