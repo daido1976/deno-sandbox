@@ -5,7 +5,7 @@
 // (4) for 文や while 文、do-while 文のようなループ文に相当するシンタックスを使用しないこと (※ ただし、ユーザー定義ではないビルトイン関数やクラス、メソッドなどがループ文を内部的に使用してしまうものは例外とします)
 
 // 除算演算子（割り算）なしバージョン
-export const fizzBuzzInternal = (n: number): string[] => {
+export const toFizzBuzzes = (n: number): string[] => {
   let step3 = 3;
   let step5 = 5;
   const arr = [...Array(n + 1).keys()].slice(1);
@@ -30,7 +30,7 @@ export const fizzBuzzInternal = (n: number): string[] => {
 };
 
 // 除算演算子（割り算）ありバージョン
-export const fizzBuzzInternal2 = (n: number): string[] => {
+export const toFizzBuzzes2 = (n: number): string[] => {
   const arr = [...Array(n + 1).keys()].slice(1);
 
   const result = arr.map((i) => {
@@ -51,13 +51,13 @@ export const fizzBuzzInternal2 = (n: number): string[] => {
 // e.g. $ deno run -A fizzbuzz/index.ts 65535
 // (() => {
 //   const inputNumber = parseInt(Deno.args[0]);
-//   fizzBuzzInternal(inputNumber).forEach((x) => console.log(x));
+//   toFizzBuzzes(inputNumber).forEach((x) => console.log(x));
 // })();
 
 // e.g. $ deno bench --unstable fizzbuzz/index.ts -- 65535
 // (() => {
 //   Deno.bench("fizzbuzz", () => {
 //     const inputNumber = parseInt(Deno.args[0]);
-//     fizzBuzzInternal(inputNumber).forEach((x) => console.log(x));
+//     toFizzBuzzes(inputNumber).forEach((x) => console.log(x));
 //   });
 // })();

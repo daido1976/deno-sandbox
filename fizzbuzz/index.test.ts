@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std@0.146.0/testing/asserts.ts";
 import { describe, it } from "https://deno.land/std@0.146.0/testing/bdd.ts";
-import { fizzBuzzInternal, fizzBuzzInternal2 } from "./index.ts";
+import { toFizzBuzzes, toFizzBuzzes2 } from "./index.ts";
 
 describe("fizzBuzz", () => {
   it("fizzBuzz", () => {
@@ -26,7 +26,7 @@ describe("fizzBuzz", () => {
       "19",
       "Buzz",
     ];
-    const actual = fizzBuzzInternal(20);
+    const actual = toFizzBuzzes(20);
     assertEquals(actual, expected);
   });
 
@@ -53,7 +53,7 @@ describe("fizzBuzz", () => {
       "19",
       "Buzz",
     ];
-    const actual = fizzBuzzInternal2(20);
+    const actual = toFizzBuzzes2(20);
     assertEquals(actual, expected);
   });
 });
