@@ -61,3 +61,31 @@ export const toFizzBuzzes2 = (n: number): string[] => {
 //     toFizzBuzzes(inputNumber).forEach((x) => console.log(x));
 //   });
 // })();
+
+// ---
+// 以下のように再帰でやろうとすると `Uncaught RangeError: Maximum call stack size exceeded` が出るのでダメ
+// const toFizzBuzz = (n: number): string => {
+//   if (n === Math.floor(n / 15) * 15) {
+//     return "FizzBuzz";
+//   } else if (n === Math.floor(n / 3) * 3) {
+//     return "Fizz";
+//   } else if (n === Math.floor(n / 5) * 5) {
+//     return "Buzz";
+//   } else {
+//     return n.toString();
+//   }
+// };
+
+// const printFizzBuzz = (current: number, until: number): void => {
+//   if (current > until) {
+//     return;
+//   }
+//   console.log(toFizzBuzz(current));
+//   printFizzBuzz(current + 1, until);
+// };
+
+// // e.g. $ deno run -A fizzbuzz/index.ts 65535
+// (() => {
+//   const inputNumber = parseInt(Deno.args[0]);
+//   printFizzBuzz(1, inputNumber);
+// })();
