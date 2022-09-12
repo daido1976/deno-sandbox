@@ -89,3 +89,13 @@ export const toFizzBuzzes2 = (n: number): string[] => {
 //   const inputNumber = parseInt(Deno.args[0]);
 //   printFizzBuzz(1, inputNumber);
 // })();
+
+// ---
+// while 使うバージョン
+// const printFizzBuzz = (until: number): void => {
+//   let current = 1;
+//   while (current <= until) {
+//     console.log(toFizzBuzz(current));
+//     current++;
+//   }
+// };
