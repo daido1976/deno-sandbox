@@ -1,5 +1,6 @@
 import { assertEquals } from "https://deno.land/std@0.146.0/testing/asserts.ts";
 import {
+  afterAll,
   afterEach,
   beforeEach,
   describe,
@@ -7,10 +8,15 @@ import {
 } from "https://deno.land/std@0.146.0/testing/bdd.ts";
 import { initCommands, initDb, Todo } from "./db.ts";
 
-const testDb = initDb("test.db");
+const dbName = "test.db";
+const testDb = initDb(dbName);
 const commands = initCommands(testDb);
 
 describe("commands", () => {
+  afterAll(() => {
+    Deno.removeSync(dbName);
+  });
+
   afterEach(() => {
     testDb.query("DELETE FROM todos;");
     testDb.query("DELETE FROM sqlite_sequence WHERE name = 'todos';");
