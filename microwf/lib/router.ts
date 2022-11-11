@@ -1,6 +1,8 @@
 import { MicroResponse } from "./response.ts";
 
-type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
+const defaultMethod = methods[0];
+type Method = typeof methods[number];
 type Routes = Map<Method, { [path: string]: MicroHandler | undefined }>;
 export type MicroHandler = (req: Request, res: MicroResponse) => Response;
 
@@ -19,8 +21,7 @@ export class Router {
   resolve(req: Request, res: MicroResponse): Response {
     console.debug("[DEBUG] routes: ", this.routes);
     const { pathname: path } = new URL(req.url);
-    // TODO: as 使わずに、`toMethod(method: string): Method` 的な関数定義して変換する
-    const method = req.method as Method;
+    const method = this.toMethod(req.method);
     const pathRouter = this.routes.get(method);
     const notFound = res.status(404).text("not found");
 
@@ -30,5 +31,14 @@ export class Router {
 
     const handler = pathRouter[path];
     return handler ? handler(req, res) : notFound;
+  }
+
+  private toMethod(str: string): Method {
+    // See. https://zenn.dev/hokaccha/articles/a665b7406b9773
+    const isMethod = (s: string): s is Method => {
+      return methods.includes(s as Method);
+    };
+
+    return isMethod(str) ? str : defaultMethod;
   }
 }
