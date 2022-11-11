@@ -1,8 +1,8 @@
 export class MicroResponse {
-  private statusCode: number;
+  #statusCode: number;
 
   constructor(status?: number) {
-    this.statusCode = status ?? 200;
+    this.#statusCode = status ?? 200;
   }
 
   status(status: number): MicroResponse {
@@ -14,13 +14,13 @@ export class MicroResponse {
       "Content-Type": "application/json",
     };
     const body = JSON.stringify(json);
-    return new Response(body, { headers, status: this.statusCode });
+    return new Response(body, { headers, status: this.#statusCode });
   }
 
   text(text: string): Response {
     const headers = {
       "Content-Type": "text/plain",
     };
-    return new Response(text, { headers, status: this.statusCode });
+    return new Response(text, { headers, status: this.#statusCode });
   }
 }
