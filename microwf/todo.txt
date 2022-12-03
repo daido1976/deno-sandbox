@@ -1,0 +1,1 @@
+- "path/:id" で named params としてアクセスできるようにする
