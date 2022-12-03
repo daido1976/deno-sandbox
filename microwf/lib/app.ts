@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.146.0/http/server.ts";
 import { outputLog } from "./logger.ts";
+import { MicroRequest } from "./request.ts";
 import { MicroResponse } from "./response.ts";
 import { MicroHandler, Router } from "./router.ts";
 
@@ -33,7 +34,7 @@ export class App {
   }
 
   async run() {
-    const handler = (req: Request) => {
+    const handler = (req: MicroRequest) => {
       const res = this.#router.resolve(req, this.#response);
       outputLog(req, res);
       return res;

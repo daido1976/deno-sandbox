@@ -1,10 +1,11 @@
+import { MicroRequest } from "./request.ts";
 import { MicroResponse } from "./response.ts";
 
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
 const defaultMethod = methods[0];
 type Method = typeof methods[number];
 type Routes = Map<Method, { [path: string]: MicroHandler | undefined }>;
-export type MicroHandler = (req: Request, res: MicroResponse) => Response;
+export type MicroHandler = (req: MicroRequest, res: MicroResponse) => Response;
 
 export class Router {
   #routes: Routes;
@@ -18,7 +19,7 @@ export class Router {
     this.#routes.set(method, { ...current, [path]: handler });
   }
 
-  resolve(req: Request, res: MicroResponse): Response {
+  resolve(req: MicroRequest, res: MicroResponse): Response {
     console.debug("[DEBUG] routes: ", this.#routes);
     const { pathname: path } = new URL(req.url);
     const method = this.#toMethod(req.method);
