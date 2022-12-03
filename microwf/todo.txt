@@ -1,1 +1,3 @@
 - "path/:id" で named params としてアクセスできるようにする
+- 静的ファイルを返せるようにする
+- SPA のホスティングサーバ兼 API サーバになるための最低限の機能を備える（CSR する SPA のためのマイクロ web framework、client 以下に react アプリ、server 以下に deno のコード置けるようにしたい）
