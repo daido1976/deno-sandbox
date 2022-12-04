@@ -4,6 +4,8 @@ import { MicroRequest } from "./request.ts";
 import { MicroResponse } from "./response.ts";
 import { MicroHandler, Router } from "./router.ts";
 
+// TODO: supoort all HTTP methods
+// https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods
 export class App {
   #router: Router;
   #response: MicroResponse;
