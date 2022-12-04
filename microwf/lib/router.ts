@@ -1,5 +1,6 @@
 import { MicroRequest } from "./request.ts";
 import { MicroResponse } from "./response.ts";
+import { staticHandler } from "./static.ts";
 
 const methods = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
 const defaultMethod = methods[0];
@@ -24,14 +25,13 @@ export class Router {
     const { pathname: path } = new URL(req.url);
     const method = this.#toMethod(req.method);
     const pathRouter = this.#routes.get(method);
-    const notFound = res.status(404).text("not found");
 
     if (!pathRouter) {
-      return notFound;
+      return staticHandler(req, res);
     }
 
     const handler = pathRouter[path];
-    return handler ? handler(req, res) : notFound;
+    return handler ? handler(req, res) : staticHandler(req, res);
   }
 
   #toMethod(str: string): Method {
