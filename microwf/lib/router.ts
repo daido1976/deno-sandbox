@@ -20,7 +20,7 @@ export class Router {
     this.#routes.set(method, { ...current, [path]: handler });
   }
 
-  resolve(req: MicroRequest, res: MicroResponse): Response {
+  resolve: MicroHandler = (req, res) => {
     console.debug("[DEBUG] routes: ", this.#routes);
     const { pathname: path } = new URL(req.url);
     const method = this.#toMethod(req.method);
@@ -32,7 +32,7 @@ export class Router {
 
     const handler = pathRouter[path];
     return handler ? handler(req, res) : staticHandler(req, res);
-  }
+  };
 
   #toMethod(str: string): Method {
     // See. https://zenn.dev/hokaccha/articles/a665b7406b9773
