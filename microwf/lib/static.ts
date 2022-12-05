@@ -1,9 +1,5 @@
+import { basename, extname, join } from "./deps.ts";
 import { MicroHandler } from "./router.ts";
-import {
-  join,
-  extname,
-  basename,
-} from "https://deno.land/std@0.167.0/path/mod.ts";
 
 const MIME_TYPES: { [key: string]: string } = {
   default: "application/octet-stream",

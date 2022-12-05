@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.146.0/http/server.ts";
+import { serve } from "./deps.ts";
 import { outputLog } from "./logger.ts";
 import { MicroRequest } from "./request.ts";
 import { MicroResponse } from "./response.ts";

@@ -1,4 +1,4 @@
-import { format } from "https://deno.land/std@0.146.0/datetime/mod.ts";
+import { format } from "./deps.ts";
 
 export function outputLog(req: Request, res: Response) {
   const { pathname } = new URL(req.url);
