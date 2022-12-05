@@ -1,4 +1,4 @@
-import { App } from "./lib/app.ts";
+import { App } from "./lib/mod.ts";
 
 const app = new App();
 
