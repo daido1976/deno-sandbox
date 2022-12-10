@@ -17,5 +17,17 @@ const logger2 = {
   failure: (...args: any) => console.error("%cx", "color: red", ...args),
 };
 
-logger2.success("Files copied successfully");
-logger2.failure("Unable to delete the 'system32' directory");
+logger2.success("logger2: Files copied successfully");
+logger2.failure("logger2: Unable to delete the 'system32' directory");
+
+// for Deno only
+import { green, red } from "https://deno.land/std@0.167.0/fmt/colors.ts";
+
+const logger3 = {
+  ...console,
+  success: (...args: any) => console.log(green("✔"), ...args),
+  failure: (...args: any) => console.error(red("x"), ...args),
+};
+
+logger3.success("logger3: Files copied successfully");
+logger3.failure("logger3: Unable to delete the 'system32' directory");
