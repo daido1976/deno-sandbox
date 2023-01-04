@@ -49,10 +49,12 @@ export const toFizzBuzzes2 = (n: number): string[] => {
 };
 
 // e.g. $ deno run -A fizzbuzz/index.ts 65535
-// (() => {
-//   const inputNumber = parseInt(Deno.args[0]);
-//   toFizzBuzzes(inputNumber).forEach((x) => console.log(x));
-// })();
+if (import.meta.main) {
+  (() => {
+    const inputNumber = parseInt(Deno.args[0]);
+    toFizzBuzzes(inputNumber).forEach((x) => console.log(x));
+  })();
+}
 
 // e.g. $ deno bench --unstable fizzbuzz/index.ts -- 65535
 // (() => {
