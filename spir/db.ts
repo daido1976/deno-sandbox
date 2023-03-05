@@ -9,6 +9,7 @@ export interface Db {
   addSchedule(account: string, slot: string): void;
   getAllSchedules(): Schedules;
   removeAllSchedules(): void;
+  isReserved(account: Account, slot: Slot): boolean;
 }
 
 export class InMemoryDb implements Db {
@@ -18,12 +19,17 @@ export class InMemoryDb implements Db {
     const current = this.#schedules.get(account) ?? [];
     this.#schedules.set(account, [...current, slot]);
   }
-
   getAllSchedules() {
     return this.#schedules;
   }
   removeAllSchedules() {
-    this.#schedules.clear;
+    this.#schedules.clear();
+  }
+
+  isReserved(account: Account, slot: Slot) {
+    const current = this.#schedules.get(account);
+    if (!current) return false;
+    return current.includes(slot);
   }
 }
 

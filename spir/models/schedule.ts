@@ -1,3 +1,5 @@
+import { db } from "../main.ts";
+
 export type Schedules = {
   [key: Account]: Slot[];
 };
@@ -8,19 +10,29 @@ type Account = string;
 type Slot = string;
 
 // NOTE: より汎用的な Result<T, E> が必要になったら修正する
-type ConfirmResult = "ok" | ConfirmErr;
+export type ConfirmResult = "ok" | ConfirmErr;
 type ConfirmErr = "conflict" | "unknown";
 
-export class Schedule {
+// TODO: メソッド記法やめる
+export const Schedule = {
   // TODO: startTime, endTime に適切な型をつける。Slot ではない気がする
-  getSlotsBy(account: Account, startTime: string, endTime: string): Slot[] {
+  getSlotsBy(_account: Account, _startTime: string, _endTime: string): Slot[] {
     return [];
-  }
+  },
   confirm(accounts: Account[], startTime: string): ConfirmResult {
+    const alreadyReserved = accounts.some((account) =>
+      db.isReserved(account, startTime)
+    );
+    if (alreadyReserved) {
+      return "conflict";
+    }
+    accounts.forEach((account) => db.addSchedule(account, startTime));
     return "ok";
-  }
+  },
   dump(): Schedules {
-    return {};
-  }
-  clear() {}
-}
+    return Object.fromEntries(db.getAllSchedules());
+  },
+  clear() {
+    db.removeAllSchedules();
+  },
+};
