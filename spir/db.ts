@@ -7,6 +7,7 @@ type Slot = string;
 
 export interface Db {
   addSchedule(account: string, slot: string): void;
+  getSlotsBy(account: Account): Slot[];
   getAllSchedules(): Schedules;
   removeAllSchedules(): void;
   isReserved(account: Account, slot: Slot): boolean;
@@ -18,6 +19,10 @@ class InMemoryDb implements Db {
   addSchedule(account: string, slot: string) {
     const current = this.#schedules.get(account) ?? [];
     this.#schedules.set(account, [...current, slot]);
+  }
+
+  getSlotsBy(account: Account) {
+    return this.#schedules.get(account) ?? [];
   }
 
   getAllSchedules() {

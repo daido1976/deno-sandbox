@@ -13,19 +13,44 @@ type Slot = string;
 export type ConfirmResult = "ok" | ConfirmErr;
 type ConfirmErr = "conflict" | "unknown";
 
+// TODO: Add test & refactor
+function getSlotsRangeOf(startTime: string, endTime: string): string[] {
+  const startDate: Date = new Date(startTime);
+  const endDate: Date = new Date(endTime);
+
+  const timeSlotCount: number =
+    (endDate.getTime() - startDate.getTime()) / (30 * 60 * 1000);
+
+  return Array.from({ length: timeSlotCount }, (_, index) => {
+    const timeSlotDate = new Date(startDate.getTime() + index * 30 * 60 * 1000);
+    return timeSlotDate.toLocaleString("ja-JP", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  });
+}
+
+function getReservedSlotsBy(accounts: Account[]): Slot[] {
+  return accounts.reduce<Slot[]>(
+    (prev, account) => [...prev, ...db.getSlotsBy(account)],
+    []
+  );
+}
+
 export const Schedule = {
   // TODO: startTime, endTime に適切な型をつける。Slot ではない気がする
   getSlotsBy: (
     account: Account | Account[],
-    _startTime: string,
-    _endTime: string
+    startTime: string,
+    endTime: string
   ): Slot[] => {
-    const _accounts = Array.isArray(account) ? account : [account];
-    // TODO:
-    // 1. startTimeとendTimeをタプルで渡すとその間のslotを全て返す関数（純粋関数）
-    // 2. 指定したアカウント群で予約済みのslotを返す関数
-    // 1, 2 の差の配列をレスポンスとする
-    return [];
+    const accounts = Array.isArray(account) ? account : [account];
+    const targetSlots = getSlotsRangeOf(startTime, endTime);
+    const reservedSlots = getReservedSlotsBy(accounts);
+    return targetSlots.filter((slot) => !reservedSlots.includes(slot));
   },
   confirm: (accounts: Account[], startTime: string): ConfirmResult => {
     const alreadyReserved = accounts.some((account) =>
