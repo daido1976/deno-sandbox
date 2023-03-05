@@ -17,11 +17,15 @@ type ConfirmErr = "conflict" | "unknown";
 export const Schedule = {
   // TODO: startTime, endTime に適切な型をつける。Slot ではない気がする
   getSlotsBy(
-    _account: Account | Account[],
+    account: Account | Account[],
     _startTime: string,
     _endTime: string
   ): Slot[] {
-    // TODO
+    const _accounts = Array.isArray(account) ? account : [account];
+    // TODO:
+    // 1. startTimeとendTimeをタプルで渡すとその間のslotを全て返す関数（純粋関数）
+    // 2. 指定したアカウント群で予約済みのslotを返す関数
+    // 1, 2 の差の配列をレスポンスとする
     return [];
   },
   confirm(accounts: Account[], startTime: string): ConfirmResult {
