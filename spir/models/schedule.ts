@@ -16,7 +16,12 @@ type ConfirmErr = "conflict" | "unknown";
 // TODO: メソッド記法やめる
 export const Schedule = {
   // TODO: startTime, endTime に適切な型をつける。Slot ではない気がする
-  getSlotsBy(_account: Account, _startTime: string, _endTime: string): Slot[] {
+  getSlotsBy(
+    _account: Account | Account[],
+    _startTime: string,
+    _endTime: string
+  ): Slot[] {
+    // TODO
     return [];
   },
   confirm(accounts: Account[], startTime: string): ConfirmResult {
