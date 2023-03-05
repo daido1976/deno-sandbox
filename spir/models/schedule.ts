@@ -1,4 +1,4 @@
-import { db } from "../main.ts";
+import { db } from "../db.ts";
 
 export type Schedules = {
   [key: Account]: Slot[];

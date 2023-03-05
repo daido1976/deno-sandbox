@@ -1,4 +1,4 @@
-export type Schedules = Map<Account, Slot[]>;
+type Schedules = Map<Account, Slot[]>;
 
 // e.g. "test1@example.com"
 type Account = string;
@@ -12,7 +12,7 @@ export interface Db {
   isReserved(account: Account, slot: Slot): boolean;
 }
 
-export class InMemoryDb implements Db {
+class InMemoryDb implements Db {
   #schedules: Schedules = new Map();
 
   addSchedule(account: string, slot: string) {
@@ -33,6 +33,8 @@ export class InMemoryDb implements Db {
   }
 }
 
-export function initDb(): Db {
+function initDb(): Db {
   return new InMemoryDb();
 }
+
+export const db = initDb();
