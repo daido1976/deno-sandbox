@@ -7,17 +7,9 @@ import { Slot } from "./handlers/slots.ts";
 export const db = initDb();
 const app = new Pera();
 
-app.get("/slots", (req, res) => {
-  return Slot.searchHandler(req, res);
-});
-app.post("/confirm", (req, res) => {
-  return Confirm.createHandler(req, res);
-});
-app.get("/data/dump", (req, res) => {
-  return Data.dumpHandler(req, res);
-});
-app.post("/data/clean", (req, res) => {
-  return Data.cleanHandler(req, res);
-});
+app.get("/slots", Slot.searchHandler);
+app.post("/confirm", Confirm.createHandler);
+app.get("/data/dump", Data.dumpHandler);
+app.post("/data/clean", Data.cleanHandler);
 
 await app.run();
