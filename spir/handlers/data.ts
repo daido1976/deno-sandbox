@@ -4,6 +4,7 @@ import { Schedule } from "../models/schedule.ts";
 const dumpHandler: PeraHandler = (_req, res) => {
   return res.json(Schedule.dump());
 };
+
 const cleanHandler: PeraHandler = (_req, res) => {
   Schedule.clear();
   return res.status(200).text("cleaned up!");

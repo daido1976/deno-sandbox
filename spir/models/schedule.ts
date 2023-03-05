@@ -13,14 +13,13 @@ type Slot = string;
 export type ConfirmResult = "ok" | ConfirmErr;
 type ConfirmErr = "conflict" | "unknown";
 
-// TODO: メソッド記法やめる
 export const Schedule = {
   // TODO: startTime, endTime に適切な型をつける。Slot ではない気がする
-  getSlotsBy(
+  getSlotsBy: (
     account: Account | Account[],
     _startTime: string,
     _endTime: string
-  ): Slot[] {
+  ): Slot[] => {
     const _accounts = Array.isArray(account) ? account : [account];
     // TODO:
     // 1. startTimeとendTimeをタプルで渡すとその間のslotを全て返す関数（純粋関数）
@@ -28,7 +27,7 @@ export const Schedule = {
     // 1, 2 の差の配列をレスポンスとする
     return [];
   },
-  confirm(accounts: Account[], startTime: string): ConfirmResult {
+  confirm: (accounts: Account[], startTime: string): ConfirmResult => {
     const alreadyReserved = accounts.some((account) =>
       db.isReserved(account, startTime)
     );
@@ -38,10 +37,10 @@ export const Schedule = {
     accounts.forEach((account) => db.addSchedule(account, startTime));
     return "ok";
   },
-  dump(): Schedules {
+  dump: (): Schedules => {
     return Object.fromEntries(db.getAllSchedules());
   },
-  clear() {
+  clear: () => {
     db.removeAllSchedules();
   },
 };

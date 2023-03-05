@@ -19,9 +19,11 @@ class InMemoryDb implements Db {
     const current = this.#schedules.get(account) ?? [];
     this.#schedules.set(account, [...current, slot]);
   }
+
   getAllSchedules() {
     return this.#schedules;
   }
+
   removeAllSchedules() {
     this.#schedules.clear();
   }
