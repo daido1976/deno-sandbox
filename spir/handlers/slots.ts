@@ -16,7 +16,6 @@ const searchHandler: PeraHandler = (req, res) => {
     startTime,
     endTime,
   } = req.query as SearchParams;
-  console.log(req.query);
   const accounts = rawAccounts.split(",");
 
   return res.json(Schedule.getSlotsBy(accounts, startTime, endTime));

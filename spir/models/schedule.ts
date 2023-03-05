@@ -13,8 +13,24 @@ type Slot = string;
 export type ConfirmResult = "ok" | ConfirmErr;
 type ConfirmErr = "conflict" | "unknown";
 
-// TODO: Add test & refactor
+// TODO: 純粋関数なので utils 以下とかに移動してテスト書きつつリファクタリングする。その場合は 30 分間隔という知識も外部から注入する
 function getSlotsRangeOf(startTime: string, endTime: string): string[] {
+  // const startDate: Date = new Date(startTime);
+  // const endDate: Date = new Date(endTime);
+
+  // const timeSlots: string[] = [];
+
+  // // 開始時間が終了時間よりも前である場合、時間帯の配列を生成します。
+  // while (startDate < endDate) {
+  //   const timeSlot: string = startDate.toLocaleString();
+  //   timeSlots.push(timeSlot);
+
+  //   startDate.setTime(startDate.getTime() + 30 * 60 * 1000);
+  // }
+
+  // return timeSlots;
+  // TODO: 👆 を https://deno.land/std@0.178.0/collections/mod.ts?s=takeWhile で書き直す
+  // もしくは https://deno.land/std@0.178.0/datetime/mod.ts?s=difference 使って minutes の diff 取って Array.from({length: ...}) でもいいかも
   const startDate: Date = new Date(startTime);
   const endDate: Date = new Date(endTime);
 
@@ -56,16 +72,11 @@ export const Schedule = {
     const alreadyReserved = accounts.some((account) =>
       db.isReserved(account, startTime)
     );
-    if (alreadyReserved) {
-      return "conflict";
-    }
+    if (alreadyReserved) return "conflict";
+
     accounts.forEach((account) => db.addSchedule(account, startTime));
     return "ok";
   },
-  dump: (): Schedules => {
-    return Object.fromEntries(db.getAllSchedules());
-  },
-  clear: () => {
-    db.removeAllSchedules();
-  },
+  dump: (): Schedules => Object.fromEntries(db.getAllSchedules()),
+  clear: () => db.removeAllSchedules(),
 };

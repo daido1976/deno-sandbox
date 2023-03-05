@@ -40,8 +40,4 @@ class InMemoryDb implements Db {
   }
 }
 
-function initDb(): Db {
-  return new InMemoryDb();
-}
-
-export const db = initDb();
+export const db = new InMemoryDb();
