@@ -1,5 +1,4 @@
 // See. https://twitter.com/EcmaKawarabe/status/1635588571427143680
-
 type Apartment = {
   metersToStation: number;
   ageOfBuilding: number;
@@ -48,3 +47,42 @@ export const buildTagsDeclarative = (apartment: Apartment): string[] => {
     []
   );
 };
+
+// with class
+export class ApartmentKlass {
+  #metersToStation: number;
+  #ageOfBuilding: number;
+  #options: string[];
+
+  constructor(args: Apartment) {
+    this.#metersToStation = args.metersToStation;
+    this.#ageOfBuilding = args.ageOfBuilding;
+    this.#options = args.options;
+  }
+
+  isNearStation() {
+    return this.#metersToStation < 1000;
+  }
+
+  isNew() {
+    return this.#ageOfBuilding < 5;
+  }
+
+  isSecure() {
+    return this.#options.includes("AutoLock");
+  }
+
+  getTags() {
+    const salesPoints: [boolean, string][] = [
+      [this.isNearStation(), "駅近"],
+      [this.isNew(), "築浅"],
+      [this.isSecure(), "セキュリティ充実"],
+    ];
+
+    return salesPoints.reduce<string[]>(
+      (tags, salesPoint) =>
+        salesPoint[0] ? [...tags, salesPoint[1]] : [...tags],
+      []
+    );
+  }
+}
