@@ -7,7 +7,7 @@ const dumpHandler: PeraHandler = (_req, res) => {
 
 const cleanHandler: PeraHandler = (_req, res) => {
   Schedule.clear();
-  return res.text("cleaned up!");
+  return res.json("cleaned up!");
 };
 
 export const Data = {

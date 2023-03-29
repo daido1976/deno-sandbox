@@ -10,12 +10,22 @@ type SearchParams = {
   endTime: string;
 };
 
+// NOTE: 業務なら素直に zod 使った方がいい
+function isSearchParams(params: unknown): params is SearchParams {
+  const { accounts, startTime, endTime } = params as SearchParams;
+  return (
+    typeof accounts === "string" &&
+    typeof startTime === "string" &&
+    typeof endTime === "string"
+  );
+}
+
 const searchHandler: PeraHandler = (req, res) => {
-  const {
-    accounts: rawAccounts,
-    startTime,
-    endTime,
-  } = req.query as SearchParams;
+  if (!isSearchParams(req.query)) {
+    return res.status(400).json("invalid parameter!");
+  }
+
+  const { accounts: rawAccounts, startTime, endTime } = req.query;
   const accounts = rawAccounts.split(",");
 
   return res.json(Schedule.getSlotsBy(accounts, startTime, endTime));
