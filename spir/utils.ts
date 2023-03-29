@@ -1,26 +1,27 @@
 import { difference } from "https://deno.land/std@0.181.0/datetime/difference.ts";
 import { format } from "https://deno.land/std@0.181.0/datetime/mod.ts";
 
-// TODO: 30 分間隔という知識も外部から注入する
-export function getSlotsRangeOf(startTime: string, endTime: string): string[] {
-  const startDate: Date = new Date(startTime);
-  const endDate: Date = new Date(endTime);
-  const intervalInMinutes = 30;
+export function getSlotsRangeOf(
+  startTime: string,
+  endTime: string,
+  // NOTE: デフォルトでは 30 分間隔にしている
+  // 現状は milliseconds の number だが、この関数のユースケースを考えると minutes の number で渡してもいいかもしれない
+  interval: number = 30 * 60 * 1000
+): string[] {
+  const startDate = new Date(startTime);
+  const endDate = new Date(endTime);
 
-  const diffInMinutes = difference(startDate, endDate, {
-    units: ["minutes"],
-  }).minutes;
+  const diff = difference(startDate, endDate, {
+    units: ["milliseconds"],
+  }).milliseconds;
 
-  if (!diffInMinutes) {
+  if (!diff) {
     return [];
   }
 
-  const timeSlotCount: number = diffInMinutes / intervalInMinutes;
+  const slotCount = diff / interval;
 
-  return Array.from({ length: timeSlotCount }, (_, index) => {
-    const timeSlotDate = new Date(
-      startDate.getTime() + index * intervalInMinutes * 60 * 1000
-    );
-    return format(timeSlotDate, "yyyy/MM/dd HH:mm");
-  });
+  return Array.from({ length: slotCount }, (_, index) =>
+    format(new Date(startDate.getTime() + index * interval), "yyyy/MM/dd HH:mm")
+  );
 }
