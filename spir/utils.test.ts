@@ -4,8 +4,8 @@ import { getTimeSlotsInRange } from "./utils.ts";
 
 describe("getTimeSlotsInRange", () => {
   it("returns the correct time slots", () => {
-    const startTime = "2023-03-29T10:00:00.000+09:00";
-    const endTime = "2023-03-29T12:00:00.000+09:00";
+    const startTime = "2023/03/29 10:00";
+    const endTime = "2023/03/29 12:00";
 
     const expected = [
       "2023/03/29 10:00",
@@ -19,8 +19,8 @@ describe("getTimeSlotsInRange", () => {
   });
 
   it("returns the correct time slots with options", () => {
-    const startTime = "2023-03-29T10:00:00.000+09:00";
-    const endTime = "2023-03-29T12:00:00.000+09:00";
+    const startTime = "2023/03/29 10:00";
+    const endTime = "2023/03/29 12:00";
 
     const expected = [
       "2023/03/29 10:00",
@@ -41,8 +41,8 @@ describe("getTimeSlotsInRange", () => {
   });
 
   it("returns empty", () => {
-    const startTime = "2023-03-29T10:00:00.000+09:00";
-    const endTime = "2023-03-29T10:29:00.000+09:00";
+    const startTime = "2023/03/29 10:00";
+    const endTime = "2023/03/29 10:29";
 
     const expected: string[] = [];
 
