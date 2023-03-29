@@ -1,5 +1,5 @@
 import { db } from "../db.ts";
-import { getSlotsRangeOf } from "../utils.ts";
+import { getTimeSlotsInRange } from "../utils.ts";
 
 export type Schedules = {
   [key: Account]: Slot[];
@@ -21,6 +21,13 @@ function getReservedSlotsBy(accounts: Account[]): Slot[] {
   );
 }
 
+function getSlotsInRange(startTime: string, endTime: string): Slot[] {
+  return getTimeSlotsInRange(startTime, endTime, {
+    intervalInMinutes: 30,
+    formatString: "yyyy/MM/dd HH:mm",
+  });
+}
+
 export const Schedule = {
   // TODO: startTime, endTime に適切な型をつける。Slot ではない気がする
   getSlotsBy: (
@@ -29,7 +36,7 @@ export const Schedule = {
     endTime: string
   ): Slot[] => {
     const accounts = Array.isArray(account) ? account : [account];
-    const targetSlots = getSlotsRangeOf(startTime, endTime);
+    const targetSlots = getSlotsInRange(startTime, endTime);
     const reservedSlots = getReservedSlotsBy(accounts);
     return targetSlots.filter((slot) => !reservedSlots.includes(slot));
   },

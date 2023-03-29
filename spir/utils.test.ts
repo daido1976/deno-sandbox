@@ -1,6 +1,6 @@
 import { assertEquals } from "https://deno.land/std@0.181.0/testing/asserts.ts";
 import { describe, it } from "https://deno.land/std@0.181.0/testing/bdd.ts";
-import { getSlotsRangeOf } from "./utils.ts";
+import { getTimeSlotsInRange } from "./utils.ts";
 
 describe("getSlotsRangeOf", () => {
   it("returns the correct time slots", () => {
@@ -14,7 +14,10 @@ describe("getSlotsRangeOf", () => {
       "2023/03/29 11:30",
     ];
 
-    const actual = getSlotsRangeOf(startTime, endTime);
+    const actual = getTimeSlotsInRange(startTime, endTime, {
+      intervalInMinutes: 30,
+      formatString: "yyyy/MM/dd HH:mm",
+    });
     assertEquals(actual, expected);
   });
 
@@ -24,7 +27,7 @@ describe("getSlotsRangeOf", () => {
 
     const expected: string[] = [];
 
-    const actual = getSlotsRangeOf(startTime, endTime);
+    const actual = getTimeSlotsInRange(startTime, endTime);
     assertEquals(actual, expected);
   });
 });
