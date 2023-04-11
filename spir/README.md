@@ -6,3 +6,11 @@ curl -X POST http://localhost:8000/confirm -H "Content-Type: application/json" -
 curl -X GET http://localhost:8000/data/dump | jq .
 curl -X POST http://localhost:8000/data/clean | jq .
 ```
+
+Integration tests with [hurl](https://hurl.dev/)
+
+```sh
+# Install hurl
+$ deno run -A spir/main.ts # Start the server before the test is executed
+$ hurl --test spir/test.hurl # on another terminal
+```
