@@ -41,10 +41,8 @@ export const buildTagsDeclarative = (apartment: Apartment): string[] => {
     },
   ];
 
-  return salesPoints.reduce<string[]>(
-    (tags, salesPoint) =>
-      salesPoint.requirement(apartment) ? [...tags, salesPoint.tag] : [...tags],
-    []
+  return salesPoints.flatMap((salesPoint) =>
+    salesPoint.requirement(apartment) ? [salesPoint.tag] : []
   );
 };
 
