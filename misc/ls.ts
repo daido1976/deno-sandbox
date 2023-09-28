@@ -1,24 +1,28 @@
 class FilePresenter {
-  constructor(private name: string, private isDirectory: boolean) {}
+  #name: string;
+  #isDirectory: boolean;
+
+  constructor(name: string, isDirectory: boolean) {
+    this.#name = name;
+    this.#isDirectory = isDirectory;
+  }
 
   toPretty(): string {
-    return this.isDirectory ? `\x1b[34m${this.name}\x1b[0m` : this.name;
+    return this.#isDirectory ? `\x1b[34m${this.#name}\x1b[0m` : this.#name;
   }
 }
 
-function listCurrentDirectory() {
-  // カレントディレクトリを取得
-  const currentPath = Deno.cwd();
-
-  // ディレクトリの中のエントリを取得し、それぞれのエントリにFilePresenterを適用
-  const files = [...Deno.readDirSync(currentPath)].map((entry) => {
+function getFilesFromDirectory(path: string): FilePresenter[] {
+  return [...Deno.readDirSync(path)].map((entry) => {
     return new FilePresenter(entry.name, entry.isDirectory);
   });
-
-  // FilePresenterを使用して、エントリを適切に表示する
-  const output = files.map((x) => x.toPretty()).join("  ");
-
-  console.log(output); // 最後に改行を追加
 }
 
-listCurrentDirectory();
+function convertFilesToOutput(files: FilePresenter[]): string {
+  return files.map((x) => x.toPretty()).join("  ");
+}
+
+const currentPath = Deno.cwd();
+const files = getFilesFromDirectory(currentPath);
+const output = convertFilesToOutput(files);
+console.log(output);
