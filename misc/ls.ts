@@ -24,7 +24,9 @@ function convertFilesToOutput(files: FilePresenter[]): string {
   return files.map((x) => x.toPretty()).join("  ");
 }
 
-const currentPath = Deno.cwd();
-const files = getFilesFromDirectory(currentPath);
-const output = convertFilesToOutput(files);
-console.log(output);
+if (import.meta.main) {
+  const targetPath = Deno.args.length > 0 ? Deno.args[0] : Deno.cwd();
+  const files = getFilesFromDirectory(targetPath);
+  const output = convertFilesToOutput(files);
+  console.log(output);
+}
