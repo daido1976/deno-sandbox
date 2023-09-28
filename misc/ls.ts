@@ -1,3 +1,5 @@
+import { blue } from "https://deno.land/std@0.202.0/fmt/colors.ts";
+
 class FilePresenter {
   #name: string;
   #isDirectory: boolean;
@@ -8,7 +10,7 @@ class FilePresenter {
   }
 
   toPretty(): string {
-    return this.#isDirectory ? `\x1b[34m${this.#name}\x1b[0m` : this.#name;
+    return this.#isDirectory ? blue(this.#name) : this.#name;
   }
 }
 
