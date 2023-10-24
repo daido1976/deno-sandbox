@@ -15,10 +15,7 @@ export type ConfirmResult = "ok" | ConfirmErr;
 type ConfirmErr = "conflict" | "unknown";
 
 function getReservedSlotsBy(accounts: Account[]): Slot[] {
-  return accounts.reduce<Slot[]>(
-    (prev, account) => [...prev, ...db.getSlotsBy(account)],
-    []
-  );
+  return accounts.flatMap((it) => db.getSlotsBy(it));
 }
 
 function getSlotsInRange(startTime: string, endTime: string): Slot[] {
