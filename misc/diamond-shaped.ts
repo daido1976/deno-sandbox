@@ -1,39 +1,42 @@
-const printCharWithPadding = (char: string, padding: number) =>
+const ASCII_UPPERCASE_A = "A".charCodeAt(0);
+const ASCII_UPPERCASE_Z = "Z".charCodeAt(0);
+
+// Function to add leading spaces to a given character string
+const padCharWithSpaces = (char: string, padding: number) =>
   " ".repeat(padding) + char;
 
-const createDiamondLine = (index: number, max: number): string => {
-  // Determine the padding on the left side
+// Function to create a single line of the diamond, composed of a mirrored alphabet sequence
+const createDiamondLine = (index: number, max: number) => {
   const padding = max - index;
-  // Create the left half of the characters
+  // Generate the left half of the diamond line up to the current character
   const leftHalf = Array.from({ length: index + 1 }, (_, i) =>
-    String.fromCharCode(65 + i)
+    String.fromCharCode(ASCII_UPPERCASE_A + i)
   ).join("");
-  // Create the right half by reversing the left half minus the last character
+  // Generate the right half by mirroring the left half, excluding the pivot character
   const rightHalf = leftHalf.split("").slice(0, -1).reverse().join("");
-  // Combine both halves with padding
-  return printCharWithPadding(leftHalf + rightHalf, padding);
+  // Combine the left and right halves with padding and return the line
+  return padCharWithSpaces(leftHalf + rightHalf, padding);
 };
 
-const printDiamond = (char: string) => {
+// Function to generate the full diamond shape string for the given character
+const generateDiamondString = (char: string) => {
   const charCode = char.toUpperCase().charCodeAt(0);
-  const maxCharCode = "Z".charCodeAt(0);
-  // Validate input
-  if (charCode < 65 || charCode > maxCharCode) {
-    console.error("Character must be a letter from A-Z.");
-    return;
+  // Validate the input character is within the range A-Z
+  if (charCode < ASCII_UPPERCASE_A || charCode > ASCII_UPPERCASE_Z) {
+    return "Character must be a letter from A-Z.";
   }
-  // Calculate the number of lines in the diamond
-  const size = charCode - 65;
-  // Generate the top half of the diamond
+  // Calculate how many lines the diamond will have based on the input character
+  const size = charCode - ASCII_UPPERCASE_A;
+  // Construct the top half of the diamond
   const topHalf = Array.from({ length: size + 1 }, (_, i) =>
     createDiamondLine(i, size)
   );
-  // Generate the bottom half of the diamond by reversing the top half minus the last line
+  // Construct the bottom half by reversing the top half, excluding the middle line
   const bottomHalf = topHalf.slice(0, -1).reverse();
-  // Combine both halves and print the diamond
-  const diamond = topHalf.concat(bottomHalf).join("\n");
-  console.log(diamond);
+  // Join the top and bottom halves to form the diamond and return the string
+  return [...topHalf, ...bottomHalf].join("\n");
 };
 
-// Call the function with the desired character
-printDiamond("Z");
+if (import.meta.main) {
+  console.log(generateDiamondString("Z"));
+}
