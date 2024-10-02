@@ -1,26 +1,14 @@
 function parseFileMimeTypes(input: string): Record<string, string> {
-  const result: Record<string, string> = {};
-
-  // 正規表現でMIMEタイプの形式を定義
   const mimeTypeRegex = /^[a-z0-9-_.]+\/[a-z0-9-_.]+$/;
 
-  // 改行で分割して行ごとに処理
-  const lines = input.split("\n");
-  lines.forEach((line) => {
-    // 各行を ": " で分割してファイル名とMIMEタイプに分ける
-    const parts = line.split(": ");
-    if (parts.length === 2) {
-      const fileName = parts[0];
-      const mimeType = parts[1];
-
-      // MIMEタイプが正しい形式であるか確認
-      if (mimeTypeRegex.test(mimeType)) {
-        result[fileName] = mimeType;
-      }
-    }
-  });
-
-  return result;
+  return input
+    .split("\n")
+    .map((line) => line.split(": ", 2))
+    .filter(([_fileName, mimeType]) => mimeTypeRegex.test(mimeType))
+    .reduce<Record<string, string>>((acc, [fileName, mimeType]) => {
+      acc[fileName] = mimeType;
+      return acc;
+    }, {});
 }
 
 import { assertEquals } from "jsr:@std/assert";
