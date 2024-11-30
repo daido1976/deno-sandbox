@@ -1,4 +1,4 @@
-import { blue } from "https://deno.land/std@0.202.0/fmt/colors.ts";
+import { blue } from "jsr:@std/fmt/colors";
 
 class FilePresenter {
   #name: string;

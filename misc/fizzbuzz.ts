@@ -102,8 +102,8 @@ if (import.meta.main) {
 //   }
 // };
 
-import { assertEquals } from "https://deno.land/std@0.146.0/testing/asserts.ts";
-import { describe, it } from "https://deno.land/std@0.146.0/testing/bdd.ts";
+import { assertEquals } from "jsr:@std/assert";
+import { describe, it } from "jsr:@std/testing/bdd";
 
 describe("fizzBuzz", () => {
   it("fizzBuzz", () => {

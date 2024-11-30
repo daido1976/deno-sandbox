@@ -21,7 +21,7 @@ logger2.success("logger2: Files copied successfully");
 logger2.failure("logger2: Unable to delete the 'system32' directory");
 
 // for Deno only
-import { green, red } from "https://deno.land/std@0.167.0/fmt/colors.ts";
+import { green, red } from "jsr:@std/fmt/colors";
 
 const logger3 = {
   ...console,
