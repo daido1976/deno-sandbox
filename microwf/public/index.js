@@ -1,10 +1,9 @@
-// deno-lint-ignore-file no-window-prefix require-await
 const mount = () => {
-  document.getElementById("hello").onclick = async () => {
+  document.getElementById("hello").onclick = () => {
     console.log("Hello static");
   };
 };
 
-window.addEventListener("load", () => {
+globalThis.addEventListener("load", () => {
   mount();
 });
