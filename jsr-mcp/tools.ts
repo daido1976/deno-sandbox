@@ -1,27 +1,62 @@
 // MCPツールの実装を切り出したファイル
 
 export async function getJsrDocs(module: string) {
-  const result = await new Deno.Command(Deno.execPath(), {
-    args: ["doc", "jsr:" + module],
-    env: { NO_COLOR: "1" },
-  })
-    .output()
-    .then((r) => new TextDecoder().decode(r.stdout));
-  return {
-    content: [{ type: "text" as const, text: result }],
-  };
-}
-
-export async function searchJsrExports(module: string, query: string) {
   try {
+    // @std/testingのようなサブモジュールのみを持つパッケージに対応
+    const modulePath = module.match(/^@std\/testing$/)
+      ? `${module}/bdd`
+      : module;
+
     const result = await new Deno.Command(Deno.execPath(), {
-      args: ["doc", "--json", "jsr:" + module],
+      args: ["doc", "jsr:" + modulePath],
       env: { NO_COLOR: "1" },
     }).output();
 
     if (!result.success) {
+      const errorText = new TextDecoder().decode(result.stderr);
       return {
-        content: [{ type: "text" as const, text: `Error getting docs for ${module}` }],
+        content: [
+          {
+            type: "text" as const,
+            text: `Error getting docs for ${module}: ${errorText}`,
+          },
+        ],
+      };
+    }
+
+    const output = new TextDecoder().decode(result.stdout);
+    return {
+      content: [{ type: "text" as const, text: output }],
+    };
+  } catch (error) {
+    return {
+      content: [{ type: "text" as const, text: `Error: ${error}` }],
+    };
+  }
+}
+
+export async function searchJsrExports(module: string, query: string) {
+  try {
+    // @std/testingのようなサブモジュールのみを持つパッケージに対応
+    const modulePath = module.match(/^@std\/testing$/)
+      ? `${module}/bdd`
+      : module;
+
+    const result = await new Deno.Command(Deno.execPath(), {
+      args: ["doc", "--json", "jsr:" + modulePath],
+      env: { NO_COLOR: "1" },
+    }).output();
+
+    if (!result.success) {
+      // エラー詳細を含める
+      const errorText = new TextDecoder().decode(result.stderr);
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: `Error getting docs for ${module}: ${errorText}`,
+          },
+        ],
       };
     }
 
@@ -54,7 +89,10 @@ export async function searchJsrExports(module: string, query: string) {
     if (matches.length === 0) {
       return {
         content: [
-          { type: "text" as const, text: `No matches for "${query}" in ${module}` },
+          {
+            type: "text" as const,
+            text: `No matches for "${query}" in ${module}`,
+          },
         ],
       };
     }
